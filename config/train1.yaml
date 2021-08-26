@@ -1,0 +1,37 @@
+train:
+  dataloader:
+    csv: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset/tr.csv
+    batch_size: 32
+    shuffle: True
+    num_workers: 4
+    drop_last: False
+    audio_path: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset
+    duration: 64000
+
+
+  
+
+  optimizer:
+    type: Adam
+    learning_rate: 1e-6
+    weight_decay: 1e-7
+
+  loss: SI-SNR
+
+FFT:
+  window_size: 512
+  hop_size: 256
+val:
+  dataloader:
+    csv: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset/cv.csv
+    batch_size: 32
+    shuffle: False
+    num_workers: 4
+    drop_last: False
+    audio_path: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset
+    duration: 64000
+
+exp:
+  result: ./exp_result/
+  epoch: 300
+  model: CRNN
