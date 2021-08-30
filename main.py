@@ -87,8 +87,9 @@ class trainer():
                 label=label.to(device)
                 loss_iter=self.loss_function(output, label)
                 losses.update(loss_iter.item())
+                # break
 
-        print('epoch %d, validate losses: %f, time estimated: %.2f seconds'%(epoch, losses.avg, times), end='\r')  
+        print('epoch %d, validate losses: %f'%(epoch, losses.avg), end='\r')  
 
         if self.best_loss > losses.avg:
             checkpoint = {
@@ -98,7 +99,7 @@ class trainer():
             }
             if epoch>20:
                 torch.save(checkpoint, self.exp_dir + "/{}_model.tar".format(epoch))
-            self.min_loss = losses.avg
+            self.best_loss = losses.avg
         print("\n")
         # exit()
 
@@ -124,7 +125,9 @@ class trainer():
             self.optimizer.step()
             self.optimizer.zero_grad()
             
-        print('epoch %d, training losses: %f, time estimated: %.2f seconds'%(epoch, losses.avg, times), end='\r')  
+            # break
+        # print(losses.avg, times)
+        print('epoch %d, training losses: %f'%(epoch, losses.avg), end='\r')  
         print("\n")
         # exit()
 

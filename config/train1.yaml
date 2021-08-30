@@ -31,6 +31,24 @@ val:
     audio_path: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset
     duration: 64000
 
+test:
+  FFT:
+    window_size: 512
+    hop_size: 256
+  model:
+    type: CRNN
+    trained: /home/intern0/Desktop/project/IITP/Beamformer/exp_result/2021_08_26_15_52_01/model/269_model.tar
+
+  dataloader:
+    csv: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset/tt.csv
+    batch_size: 1
+    shuffle: False
+    num_workers: 4
+    drop_last: False
+    audio_path: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset
+    duration: None
+
+
 exp:
   result: ./exp_result/
   epoch: 300

@@ -10,6 +10,8 @@ class wav_data_loader():
         self.label_list=csv['label_path'].tolist()
         self.duration=config['duration']
         self.location=config['audio_path']
+        self.snr=csv['SNR'].tolist()
+        
         
     def __len__(self):
         return len(self.input_list)
@@ -22,6 +24,9 @@ class wav_data_loader():
         label_file=self.label_list[idx]
         label_file=self.location+self.label_list[idx][9:]
         label_file,_=sf.read(label_file, dtype='float32')
+
+        if self.duration == 'None':
+            return input_file.T, label_file.T, self.snr[idx], self.input_list[idx]
 
         if input_file.shape[0]>self.duration:
             start=np.random.randint(0, input_file.shape[0]-self.duration)

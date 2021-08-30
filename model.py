@@ -327,9 +327,15 @@ class FFT_CRN_IMAG(nn.Module):
     
     def forward(self, x):
         x=self.stft_module(x, cplx=True)
+        
         x=torch.cat((x[0], x[1]), dim=1).permute(0,1,3,2)
         
-        output_x=self.CRN(x).permute(0,1,3,2)
+        output_x=self.CRN(x)
+        # print(output_x.dim())
+        # exit()
+        if output_x.dim()==3:
+            output_x=output_x.unsqueeze(0)
+        output_x=output_x.permute(0,1,3,2) # input과 곱하기 하기
         # print(x.shape)
         # exit()
         x=self.istft_module(output_x[:,0,:,:],output_x[:,1,:,:], cplx=True)
