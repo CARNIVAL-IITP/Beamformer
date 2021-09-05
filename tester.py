@@ -32,14 +32,19 @@ def calc_snr(inference, label, noise):
     # print(noise.shape)
     # exit()
     noise=torch.norm(noise, 1)
-   
-    # noise=torch.abs(noise).sum(dim=1)
-    # print(noise)
+    loss_function=auraloss.time.SISDRLoss()
+    res=-loss_function(inference, label)
+    return res.cpu()
+    # print(res)
     # exit()
-    # label=label[:,inference.shape[1]]
-    residual=torch.norm(inference-label, 1)
-    # residual=torch.abs(inference-label).sum(dim=1)
-    return 20*torch.log10(noise/residual)
+
+    # # noise=torch.abs(noise).sum(dim=1)
+    # # print(noise)
+    # # exit()
+    # # label=label[:,inference.shape[1]]
+    # residual=torch.norm(inference-label, 1)
+    # # residual=torch.abs(inference-label).sum(dim=1)
+    # return 20*torch.log10(noise/residual)
 
 class tester():
     def __init__(self,yaml_file, device):
@@ -51,6 +56,7 @@ class tester():
         self.model=model.FFT_CRN_IMAG(self.config_data['FFT']).to(self.device).eval()
         self.model.load_state_dict(torch.load(self.config_data['model']['trained'])['state_dict_NS'])
         self.snr_list=[]
+        
 
         with torch.no_grad():
             for iter_num, (input_data, label, snr, file_name) in tqdm(enumerate(self.test_loader), desc='Test', total=len(self.test_loader)):
@@ -67,6 +73,9 @@ class tester():
                 # print(output.shape, label.shape)
                 # print(snr)
                 snri=calc_snr(output, label, input_data[:,0,:]-label)
+                # print(snri-snr)
+                # exit()
+                # exit()
                 output=output.cpu().squeeze().numpy()
                 sf.write('/home/intern0/Desktop/project/IITP/Beamformer/exp_result/2021_08_26_15_52_01/wav/'+file_name, output, 16000)
                 # print(snri)
