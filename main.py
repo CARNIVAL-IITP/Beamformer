@@ -9,7 +9,7 @@ import os
 import model
 import auraloss
 from tqdm import tqdm
-
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -66,7 +66,8 @@ class trainer():
         self.exp_dir=exp_mkdir(self.config_data['exp']['result'])
         
         self.best_loss=484964
-        
+        self.scheduler=ReduceLROnPlateau(self.optimizer, mode='min', factor=0.5, patience=4, verbose=True)
+
         for epoch in range(self.config_data['exp']['epoch']):
             self.train(epoch)
             self.val(epoch)
@@ -90,7 +91,7 @@ class trainer():
                 # break
 
         print('epoch %d, validate losses: %f'%(epoch, losses.avg), end='\r')  
-
+        self.scheduler.step(losses.avg)
         if self.best_loss > losses.avg:
             checkpoint = {
                 'epoch': epoch + 1,
@@ -101,6 +102,7 @@ class trainer():
                 torch.save(checkpoint, self.exp_dir + "/{}_model.tar".format(epoch))
             self.best_loss = losses.avg
         print("\n")
+        # return losses.avg
         # exit()
 
     def train(self, epoch):
@@ -130,7 +132,7 @@ class trainer():
         print('epoch %d, training losses: %f'%(epoch, losses.avg), end='\r')  
         print("\n")
         # exit()
-
+        # retur
 
     def init_optimizer(self):
         opti_option=self.config_data['train']['optimizer']
