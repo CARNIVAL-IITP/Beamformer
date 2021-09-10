@@ -37,7 +37,7 @@ test:
     hop_size: 256
   model:
     type: CRNN
-    trained: /home/intern0/Desktop/project/IITP/Beamformer/exp_result/2021_08_26_15_52_01/model/269_model.tar
+    trained: /home/intern0/Desktop/project/IITP/Beamformer/exp_result/2021_09_08_20_59_15/6_model.tar
 
   dataloader:
     csv: /home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/dataset/tt.csv

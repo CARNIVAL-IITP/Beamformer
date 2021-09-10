@@ -175,7 +175,7 @@ class CRNN(nn.Module):
         # for 640 samples / frame
         # self.LSTM1 = nn.LSTM(input_size=2304, hidden_size=2304, num_layers=2, batch_first=True)
         # # for 320 samples / frame
-        self.LSTM1 = nn.LSTM(input_size=1792, hidden_size=1792, num_layers=2, batch_first=True)
+        self.LSTM1 = nn.LSTM(input_size=1792, hidden_size=1792, num_layers=3, batch_first=True)
 
         # grouped LSTM ( K=2 )
         # self.LSTM1_1 = nn.LSTM(input_size=512, hidden_size=512, num_layers=1, batch_first=True)
@@ -233,16 +233,11 @@ class CRNN(nn.Module):
         x5=self.bn5(self.conv5(x4))
         x5=F.elu(x5)
         
-        # print(x5.shape)
-        # exit()
-        
+       
        
         # reshape
         out5 = x5.permute(0, 2, 1, 3) # [B, T, Ch, F]
-        # print(out5.shape)
-        # exit()
-        out5 = out5.reshape(out5.size()[0], out5.size()[1], -1)
-        
+        out5 = out5.reshape(out5.size()[0], out5.size()[1], -1)        
         lstm2, (hn, cn) = self.LSTM1(out5)
         # print(lstm2.shape)
         # exit()
@@ -286,7 +281,7 @@ class CRNN(nn.Module):
         res4_real = torch.cat((res4_real, x1), 1)
         
         res5_real=self.bnT5_real(self.convT5_real(res4_real))  # [B, 1, T, 161]
-
+        
 
         # ConvTrans for imag
         res_imag = torch.cat((output, x5), 1)
@@ -309,9 +304,17 @@ class CRNN(nn.Module):
         
         res5_imag=self.bnT5_imag(self.convT5_imag(res4_imag))  # [B, 1, T, 161]
 
+
+        # can be changed
+        res5_real=F.elu(res5_real)*x[:,0:1,:,:]
+        res5_imag=F.elu(res5_imag)*x[:,4:5,:,:]
+
+        # res5_real=F.softplus(res5_real)*x[:,0:1,:,:]
+        # res5_imag=F.softplus(res5_imag)*x[:,4:5,:,:]
         
-        # concat real & imag
+       
         res5 = torch.cat((res5_real, res5_imag), 1)     # [B, 2, T, 161]
+        
         
         return res5.squeeze()
 

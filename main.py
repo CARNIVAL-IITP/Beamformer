@@ -98,7 +98,7 @@ class trainer():
                 'state_dict_NS': self.model.state_dict(),
                 'optimizer': self.optimizer.state_dict()
             }
-            if epoch>20:
+            if epoch>-1:
                 torch.save(checkpoint, self.exp_dir + "/{}_model.tar".format(epoch))
             self.best_loss = losses.avg
         print("\n")

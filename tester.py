@@ -77,7 +77,7 @@ class tester():
                 # exit()
                 # exit()
                 output=output.cpu().squeeze().numpy()
-                sf.write('/home/intern0/Desktop/project/IITP/Beamformer/exp_result/2021_08_26_15_52_01/wav/'+file_name, output, 16000)
+                sf.write('/home/intern0/Desktop/project/IITP/Beamformer/exp_result/2021_09_08_20_59_15/wav/'+file_name, output, 16000)
                 # print(snri)
                 # exit()
                 self.snr_list.append(snri.cpu())
