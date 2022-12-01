@@ -1,2 +1,2 @@
 IITP project
-Beamforming model updat
+Beamforming model update
