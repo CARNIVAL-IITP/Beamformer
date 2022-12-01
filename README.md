@@ -1,2 +1,2 @@
 IITP project
-Beamforming
+Beamforming model
