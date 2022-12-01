@@ -128,7 +128,6 @@ class simulator_common():
                         [-6, 0, 0],
                         [-10, 0, 0],
                         [-14, 0, 0]])
-        # pos_8=np.flip(pos_8, -1)
         return {4:pos_4/100, 6:pos_6/100, 8:pos_8/100}
 
 
@@ -240,21 +239,15 @@ class acoustic_simulator_on_the_fly(simulator_common):
 
         while True:
 
-            # plt.scatter(mic_pos[:,0], mic_pos[:,1])
 
             theta=random.uniform(0, 2*math.pi)
-            # theta=math.pi/2
-            # theta=0.0
+      
             c, s=np.cos(theta), np.sin(theta)      
             R=np.array(((c, -s), (s,c)))
             mic_pos=R.dot(mic_pos[:,:2].T).T      
             theta=np.rad2deg(theta)
 
-            # plt.scatter(mic_pos[:,0], mic_pos[:,1])
-            # plt.savefig('../results/array_rotate.png')
-            # print(mic_pos.shape)
-            # print(theta)
-            # exit()
+        
 
             mic_height=random.uniform(*self.rir_character_dict['mic']['mic_height'])
             mic_loc=np.zeros((n_mic, 3), dtype=np.float32)
@@ -299,23 +292,18 @@ class acoustic_simulator_on_the_fly(simulator_common):
 
                 
                 azi_deg=random.randrange(*self.rir_character_dict['room']['azimuth'])
-                # azi_deg=azi_deg%360
-                # azi_deg=random.randrange(*self.rir_character_dict['room']['azimuth'])
-                
+               
                
                 if len(azi_pos)==0:
                     break
 
-                ##### real gap
+          
             
 
                 np_azi_gap=np.abs(np_azi-azi_deg)
                 np_azi_360_gap=360-np_azi_gap
                 np_azi_gap=np.stack((np_azi_gap, np_azi_360_gap), axis=0).min(axis=0)
-                # print(azi_pos, azi_deg, np_azi_gap)
-                # dbhfauid=input()
-
-                ##### linear gap
+       
 
                 if azi_deg>180:
                     azi_linear_deg=360-azi_deg
@@ -325,55 +313,30 @@ class acoustic_simulator_on_the_fly(simulator_common):
                 np_linear_azi_gap=np.abs(np_linear_azi-azi_linear_deg)
 
                 
-                # print(np_linear_azi, np_azi)
-                # exit()
-
-                
-               
-                
-                # check least degree
                 np_azi_gap=np_azi_gap>self.rir_character_dict['azi_gap']
                 np_linear_azi_gap=np_linear_azi_gap>self.rir_character_dict['azi_gap']
-                # print(np_azi.shape)
-                # exit()
+      
                 
                 if np_azi_gap.all() and np_linear_azi_gap.all():
-                    # print(np_azi)
-                    # exit()
-                    # print(azi_pos, azi_linear_deg, np_linear_azi_gap)
-                    # dbhfauid=input()
+                  
                     
                     break  
-                # else:
-                #     print(np_azi)
+         
 
             azi_fluctuation=0.0
-            
-            # azi_deg=30
-            # theta=60
-            # azi_fluctuation=0
+      
             azi=np.deg2rad(azi_deg+theta+azi_fluctuation+self.rir_character_dict['ref_vec'])
-            
-            # print(azi)
-            # exit()
-            # azi=np.deg2rad(azi_deg+theta+90+azi_fluctuation)
-
-            # ele=random.randrange(*self.rir_character_dict['room']['elevation'])
+   
             ele=random.uniform(*self.rir_character_dict['room']['elevation'][:2])
             
             ele=np.deg2rad(ele)
 
-            
-            # r=0.08
-          
-            # azi=np.deg2rad(-30-theta)
 
 
             x=r*np.sin(ele)*np.cos(azi)
             y=r*np.sin(ele)*np.sin(azi)
             z=r*np.cos(ele)
-            # print(x,y,z)
-            # exit()
+        
 
            
            
@@ -384,8 +347,7 @@ class acoustic_simulator_on_the_fly(simulator_common):
             if 0<speech_pos[0]<room_sz[0] and 0<speech_pos[1]<room_sz[1] and 0<speech_pos[2]<room_sz[2]:
               
                 break
-            # else:
-            #     print('Not in room')
+        
 
         return speech_pos, azi_deg
     
@@ -396,11 +358,9 @@ class acoustic_simulator_on_the_fly(simulator_common):
 
             while True:
 
-                
-                # azi_deg=random.uniform(0, 360)
 
                 azi_deg=random.uniform(0, 360)
-                # azi_deg=azi_deg%360
+         
 
                 if len(azi_pos)==0:
                     break
@@ -410,10 +370,8 @@ class acoustic_simulator_on_the_fly(simulator_common):
                 np_azi=np.stack((np_azi, np_azi_360), axis=0).min(axis=0)
                
                 
-                # check least degree
                 np_azi=np_azi>self.rir_character_dict['azi_gap']
-                # print(np_azi.shape)
-                # exit()
+               
                 
                 if np_azi.all():
 
@@ -423,12 +381,10 @@ class acoustic_simulator_on_the_fly(simulator_common):
 
           
             azi=np.deg2rad(azi_deg+theta+self.rir_character_dict['ref_vec'])
-            # azi=np.deg2rad(azi_deg+theta+90+azi_fluctuation)
             ele=random.uniform(0, 180)
             ele=np.deg2rad(ele)
 
-            # azi+=theta
-
+ 
             
 
             x=r*np.sin(ele)*np.cos(azi)
@@ -445,8 +401,6 @@ class acoustic_simulator_on_the_fly(simulator_common):
             if 0<speech_pos[0]<room_sz[0] and 0<speech_pos[1]<room_sz[1] and 0<speech_pos[2]<room_sz[2]:
               
                 break
-            # else:
-            #     print('Not in room')
 
         return speech_pos, azi_deg
 
@@ -491,15 +445,12 @@ class acoustic_simulator_on_the_fly(simulator_common):
                 mic_pos=mic['mic_pos'][36:]
         n_mic=mic_pos.shape[0]
         
-        
-        # print(mic_pos)
+
        
         self.gpu_rir_param(room_sz, rt60, abs_weight)
 
         theta, mic_pos, mic_center= self.mic_rotate_location(mic_pos, n_mic, room_sz, mic_orV)
-        
-        # print(mic_pos, mic_center)
-        # exit()
+    
         azi_pos=[]
         linear_azi_pos=[]
         speech_pos_list=[]
@@ -514,26 +465,7 @@ class acoustic_simulator_on_the_fly(simulator_common):
                 linear_azi_pos.append(180-gp)
             else:
                 linear_azi_pos.append(azi)
-            # print(azi_pos, theta)
-            # # mic_pos=mic_pos+np.expand_dims(mic_center, axis=0)[:,:-1]
-            # # mic_pos=mic_pos.T
-            # # speech_pos=speech_pos.T
-            # plt.scatter(mic_pos[:, 0]-mic_pos[:, 0].mean(), mic_pos[:, 1]-mic_pos[:, 1].mean())
-            # # plt.scatter(mic_pos[:, 0], mic_pos[:, 1])
-            # speech_pos=speech_pos-mic_center
-            # plt.scatter(speech_pos[0]-mic_pos[:, 0].mean(), speech_pos[1]-mic_pos[:, 1].mean())
-            # # pos_src=self.params['pos_src'][:-1, :2]
-            # plt.grid(True)
-            # print(azi_pos)
-            # # plt.scatter(pos_src[:,0], pos_src[:,1])
-            # plt.savefig('../results/mic_array_spk.png')
-            # # print(pos_src.shape)
-            # print(speech_pos)
-            # exit()
-            # print(self.params)
-            # exit()
-            # print(theta)
-            # exit()
+
         
         if with_coherent_noise:
             
@@ -544,18 +476,7 @@ class acoustic_simulator_on_the_fly(simulator_common):
      
         self.params['pos_src']=np.stack(speech_pos_list, axis=0)
         
-        # print('\n 1')
-        # print(azi_pos, print(mic_center))
-        # print('\n 2')
-        # print(theta)
 
-        # for key in self.params.keys():
-        #     print(key)
-        #     print(self.params[key])
-        #     print('\n')
-        # exit()
-        # print(azi_pos, linear_azi_pos)
-        # exit()
         return self.params, mic_pos, azi_pos, linear_azi_pos
     
     def room_choice_from_dict(self, room_dict):
@@ -575,8 +496,6 @@ class acoustic_simulator_on_the_fly(simulator_common):
         
         self.gpu_rir_param(room_sz, rt60, abs_weight, att_diff, att_max)
        
-
-        # mic_pos, n_mic=self.mic_select()
 
         theta, mic_center=self.get_theta_mic_center()
      
@@ -600,18 +519,7 @@ class acoustic_simulator_on_the_fly(simulator_common):
         
         
         self.params, mic_pos, azi_list, linear_azi_pos_list=self.create_param(num_spk, with_coherent_noise, mic_type, mic_num)
-        # pos_rcv=self.params['pos_rcv'][..., :-1]
-        # plt.scatter(pos_rcv[:, 0], pos_rcv[:, 1])
-       
-        # pos_src=self.params['pos_src'][:-1, :2]
-        
-        # print(azi_list)
-        # plt.scatter(pos_src[:,0], pos_src[:,1])
-        # plt.savefig('../results/mic_array.png')
-        # print(pos_src.shape)
-        # exit()
-        # print(self.params)
-        # exit()
+
         rirs = gpuRIR.simulateRIR(**self.params)    
 
        
@@ -628,7 +536,7 @@ class acoustic_simulator_for_test(simulator_common):
 
     def __init__ (self, ):
         super(acoustic_simulator_for_test, self).__init__()
-        # None           
+        
 
     def create_rir(self, input_dict): 
         
