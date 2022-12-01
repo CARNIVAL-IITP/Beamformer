@@ -1,4 +1,14 @@
 *.wav
 *.txt
-*.pt
+*.npz
+*.npy
 *.tar
+*.pt
+*.pth
+*.csv
+*.pyc
+/**/wandb/
+/**/results/
+*.png
+*.pkl
+*.gif

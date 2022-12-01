@@ -1,0 +1,26 @@
+test:
+
+  pkl_dir: 
+
+
+  metadata_dir: 
+  noise_csv: 
+  speech_csv: 
+  pkl_csv: 
+
+  room_yaml: 
+  
+  ans_azi: 0
+  degree_resolution: 1
+
+  mic_type: circular # circular,. ellipsoid, linear
+  mic_num: 4 # 4, 6, 8
+  max_n_mic: 8
+
+  dataloader_dict:
+    batch_size: 1
+    shuffle: False
+    num_workers: 8
+    drop_last: False
+
+
