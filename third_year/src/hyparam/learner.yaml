@@ -1,0 +1,43 @@
+optimizer:
+  type: Adam
+  gradient_clip: 5
+  config:
+    lr: 1.0e-3
+    weight_decay: 1.0e-6
+
+ 
+beampattern:
+  sound_speed: 343.0
+  fs: 16000
+  fft_len: 320
+  theta_step: 5.0
+  
+  angle_candidates: [0, 5, 15] # degree
+  
+
+  time_avg: True
+
+  sigma: 10.0
+  p: 0.707106781
+
+  device: 'cuda'
+  clip: True
+
+optimizer_scheduler:
+  type: ReduceLROnPlateau
+  config:
+    mode: 'min'
+    factor: 0.9
+    patience: 0
+    threshold: 1.0e-8
+    min_lr: 1.0e-4
+    verbose: True
+    
+loss: 
+  optimize_method: 'min'
+  type: sync_SI_SDR
+  # type: mse
+  option:
+    train_map_num: [0, 1, 2]
+    each_layer_weight: [1.0, 1.0, 1.0]
+  
